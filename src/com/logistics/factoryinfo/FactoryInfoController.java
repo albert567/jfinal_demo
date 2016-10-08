@@ -128,6 +128,9 @@ public class FactoryInfoController extends Controller {
 				new TypeToken<List<String[]>>(){}.getType());//门岗硬件
 		final List<String[]> weiHardware = gson.fromJson(getPara("wei_hardware"), 
 				new TypeToken<List<String[]>>(){}.getType());//计量衡器硬件
+		
+		System.out.println("ticHardware="+ticHardware);
+		System.out.println("monHardware="+monHardware);
 		boolean succeed = Db.tx(new IAtom(){
 			public boolean run() throws SQLException {
 				Factoryinfo info = null;
@@ -135,7 +138,7 @@ public class FactoryInfoController extends Controller {
 				boolean doorFlag = false;
 				boolean weightFlag = false;
 				for(int i=1;i<=faIndex;i++){
-					info = Factoryinfo.dao.findByBaseIdAndIndex(baseId,faIndex);
+					info = Factoryinfo.dao.findByBaseIdAndIndex(baseId,i);
 					info.set("tic_hardware", ticHardware.get(i-1));//开单室硬件
 					info.set("mon_hardware", monHardware.get(i-1));//监控室硬件
 					
@@ -149,7 +152,7 @@ public class FactoryInfoController extends Controller {
 					info.set("person_count", mat.getMaPersonCount());//使用人数
 					infoFlag = info.update();
 					
-					Doorhardware.dao.deleteByBaseIdAndIndex(baseId,faIndex);
+					Doorhardware.dao.deleteByBaseIdAndIndex(baseId,i);
 					String[] doors = doorHardware.get(i-1);
 					Doorhardware door = new Doorhardware();
 					for(int j=0;j<doors.length;j++){
@@ -162,7 +165,7 @@ public class FactoryInfoController extends Controller {
 						System.out.println("保存成功，doorHardware["+(i-1)+"]["+j+"]=" + doors[j]);
 					}
 					
-					Weighthardware.dao.deleteByBaseIdAndIndex(baseId,faIndex);
+					Weighthardware.dao.deleteByBaseIdAndIndex(baseId,i);
 					String[] weights = weiHardware.get(i-1);
 					Weighthardware weight = new Weighthardware();
 					for(int j=0;j<weights.length;j++){

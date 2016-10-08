@@ -19,7 +19,19 @@ public class Baseinfo extends BaseBaseinfo<Baseinfo> {
 		return paginate(pageNumber, pageSize, "select *", "from baseinfo where email=? order by id desc",email);
 	}
 	
+	public Page<Baseinfo> paginate(int pageNumber, int pageSize) {
+		return paginate(pageNumber, pageSize, "select *", "from baseinfo order by id desc");
+	}
+	
 	public List<Baseinfo> findAllByEmail(String email) {
 		return find("select * from baseinfo where email=? order by id desc",email);
+	}
+	
+	public List<Baseinfo> findAllByKey(String email,String key) {
+		return find("select * from baseinfo where email=? and"
+				+ " (company like ? or sale_company like ?"
+				+ " or industry like ? or sale_adviser like ?)"
+				+ " order by id desc",email,"%"+key+"%",
+				"%"+key+"%","%"+key+"%","%"+key+"%");
 	}
 }

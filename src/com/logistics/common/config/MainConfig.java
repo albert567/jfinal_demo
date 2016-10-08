@@ -3,6 +3,7 @@ package com.logistics.common.config;
 import com.logistics.common.model._MappingKit;
 import com.logistics.doors.DoorsController;
 import com.logistics.factoryinfo.FactoryInfoController;
+import com.logistics.history.HistoryController;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -17,7 +18,6 @@ import com.jfinal.plugin.activerecord.dialect.OracleDialect;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.logistics.baseinfo.BaseInfoController;
-import com.logistics.blog.BlogController;
 import com.logistics.index.IndexController;
 import com.logistics.weights.WeightsController;
 
@@ -34,7 +34,6 @@ public class MainConfig extends JFinalConfig {
 		me.setDevMode(PropKit.getBoolean("config.devMode", false));
 		me.setViewType(ViewType.FREE_MARKER);
 		me.setEncoding("UTF-8");
-		//me.setBaseViewPath("/res");
 	}
 
 	/**
@@ -42,12 +41,11 @@ public class MainConfig extends JFinalConfig {
 	 */
 	public void configRoute(Routes me) {
 		me.add("/", IndexController.class, "/index"); // 第三个参数为该Controller的视图存放路径
-		me.add("/blog", BlogController.class); // 第三个参数省略时默认与第一个参数值相同，在此即为
-												// "/blog"
 		me.add("/baseinfo", BaseInfoController.class);//基本信息维护
 		me.add("/factory", FactoryInfoController.class);//工厂信息维护
 		me.add("/door", WeightsController.class);//门岗
 		me.add("/weight", DoorsController.class);//计量衡器
+		me.add("/history", HistoryController.class);//计量衡器
 	}
 
 	public static C3p0Plugin createC3p0Plugin() {

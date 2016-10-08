@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,22 @@ import com.jfinal.core.JFinal;
  */
 public class BaseInfoController extends Controller {
 	public void index() {
-		renderJson(Baseinfo.dao.findAllByEmail(getPara("email")));
+		//renderJson(Baseinfo.dao.findAllByEmail(getPara("email")));
+		renderJson(Baseinfo.dao.paginate(getParaToInt("index",1),5,getPara("email")));
+	}
+	
+	public void data(){
+		setAttr("basePage", Baseinfo.dao.paginate(getParaToInt(0,1),10));
+		render("logistics.html");
+	}
+	
+	/**
+	 * 根据输入关键字进行搜索
+	 */
+	public void findByKey(){
+		String email = getPara("email");
+		String key = getPara("key");
+		renderJson(Baseinfo.dao.findAllByKey(email, key));
 	}
 	
 	public void add() {
@@ -62,9 +78,8 @@ public class BaseInfoController extends Controller {
 		}
 	}
 	
-	public Baseinfo edit() {
-		Baseinfo info = Baseinfo.dao.findById(getParaToInt());
-		return info;
+	public void edit() {
+		renderHtml("功能还没实现");
 	}
 	
 	public void update() {
@@ -76,8 +91,6 @@ public class BaseInfoController extends Controller {
 		String softDiscount = getPara("soft_discount");//软件折扣
 		String factoryCount = getPara("factory_count");//报价工厂数
 		String isBuyReport = getPara("is_buy_report");//购买报表平台
-		String updateDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-				.format(Calendar.getInstance().getTime());//更新时间
 		
 		Baseinfo info = new Baseinfo();
 		info.set("id", id);
@@ -88,12 +101,12 @@ public class BaseInfoController extends Controller {
 		info.set("soft_discount", softDiscount);
 		info.set("factory_count", factoryCount);
 		info.set("is_buy_report", isBuyReport);
-		info.set("update_date", updateDate);
+		info.set("updatedate", new java.sql.Date(new java.util.Date().getTime()));
 		renderJson(info.update());
 	}
 	
 	public void delete() {
-		renderJson(Baseinfo.dao.deleteById(getParaToInt()));
+		renderHtml("功能还没实现");
 	}
 	/**
 	 * 生成报价单并下载

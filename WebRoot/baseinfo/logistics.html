@@ -1,0 +1,33 @@
+<#include "/common/_layout.html"/> <@layout>
+<h1>物流一卡通手机报价历史数据</h1>
+<div class="table_box">
+	<table class="list">
+		<tbody>
+			<tr>
+				<th width="4%">id</th>
+				<th width="12%">公司名称</th>
+				<th width="12%">销售分公司</th>
+				<th width="12%">销售顾问</th>
+				<th width="12%">软件折扣</th>
+				<th width="12%">购买报表平台</th>
+				<th width="12%">创建时间</th>
+			</tr>
+
+			<#list basePage.getList() as x>
+			<tr>
+				<td style="text-align: left;">${x.id}</td>
+				<td style="text-align: left;">${x.COMPANY}</td>
+				<td style="text-align: left;">${x.SALE_COMPANY}</td>
+				<td style="text-align: left;">${x.SALE_ADVISER}</td>
+				<td style="text-align: left;">${x.SOFT_DISCOUNT}</td>
+				<td style="text-align: left;">${(x.IS_BUY_REPORT="true")?string("是","否")}</td>
+				<td style="text-align: left;">${x.CREATEDATE}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+	<#include "/common/_paginate.html" /> <@paginate
+	currentPage=basePage.pageNumber totalPage=basePage.totalPage
+	actionUrl="/baseinfo/data/" />
+</div>
+</@layout>
